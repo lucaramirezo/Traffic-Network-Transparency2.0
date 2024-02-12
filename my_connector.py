@@ -1,5 +1,5 @@
 import mysql.connector
-
+import pandas as pd
 
 class MySQLConnector:
     def __init__(self, host, user, password, database=None):
@@ -34,6 +34,18 @@ class MySQLConnector:
     def fetch_data(self, query):
         self.cursor.execute(query)
         return self.cursor.fetchall()
+
+    def fetch_data_as_df(self, query):
+        # Ejecutar la consulta
+        self.cursor.execute(query)
+        result = self.cursor.fetchall()
+
+        # Obtener los nombres de las columnas de los resultados
+        column_names = [desc[0] for desc in self.cursor.description]
+
+        # Convertir los resultados en un DataFrame de Pandas
+        df = pd.DataFrame(result, columns=column_names)
+        return df
 
     def close(self):
         if self.cursor:
