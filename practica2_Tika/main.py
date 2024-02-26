@@ -7,7 +7,7 @@ class Tika:
     extract_content = None
     def __init__(self, file_path):
         self.file_path = file_path
-        self.tika_client = TikaApp(file_jar='tika-app-1.16.jar')
+        self.tika_client = TikaApp(file_jar='../tika-app-1.16.jar')
         
     def TikaReader(self):
         self.detect_content_type = self.tika_client.detect_content_type(self.file_path)
