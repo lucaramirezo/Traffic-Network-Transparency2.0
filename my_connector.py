@@ -23,29 +23,55 @@ class MySQLConnector:
         except mysql.connector.Error as err:
             print("Error: ", err)
 
-    def execute_query(self, query):
+    def execute(self, query, data=None):
         try:
-            self.cursor.execute(query)
+            if data:
+                self.cursor.execute(query, data)
+            else:
+                self.cursor.execute(query)
             self.connection.commit()
             print("Query executed successfully.")
         except mysql.connector.Error as err:
-            print("Error: ", err)
+            print("Error executing query: ", err)
 
-    def fetch_data(self, query):
-        self.cursor.execute(query)
-        return self.cursor.fetchall()
+    def fetch_data(self, query, data=None):
+        try:
+            if data is not None:
+                self.cursor.execute(query, data)
+            else:
+                self.cursor.execute(query)
+            return self.cursor.fetchall()
+        except mysql.connector.Error as err:
+            print("Error fetching data: ", err)
+            return None
 
-    def fetch_data_as_df(self, query):
-        # Ejecutar la consulta
-        self.cursor.execute(query)
-        result = self.cursor.fetchall()
 
-        # Obtener los nombres de las columnas de los resultados
-        column_names = [desc[0] for desc in self.cursor.description]
+    def fetch_data_as_df(self, query, data=None):
+        try:
+            if data is not None:
+                self.cursor.execute(query, data)
+            else:
+                self.cursor.execute(query)
+            result = self.cursor.fetchall()
+            column_names = [desc[0] for desc in self.cursor.description]
+            df = pd.DataFrame(result, columns=column_names)
+            return df
+        except mysql.connector.Error as err:
+            print("Error fetching data as DataFrame: ", err)
+            return None
 
-        # Convertir los resultados en un DataFrame de Pandas
-        df = pd.DataFrame(result, columns=column_names)
-        return df
+    def commit(self):
+        try:
+            self.connection.commit()
+            print("Changes committed successfully.")
+        except mysql.connector.Error as err:
+            print("Error committing changes: ", err)
+
+    def lastrowid(self):
+        try:
+            return self.cursor.lastrowid
+        except mysql.connector.Error as err:
+            print("Error fetching last row id: ", err)
 
     def close(self):
         if self.cursor:
