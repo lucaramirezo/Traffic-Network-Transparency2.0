@@ -67,6 +67,12 @@ class MySQLConnector:
         except mysql.connector.Error as err:
             print("Error committing changes: ", err)
 
+    def rowcount(self):
+        try:
+            return self.cursor.rowcount
+        except mysql.connector.Error as err:
+            print("Error fetching row count: ", err)
+
     def lastrowid(self):
         try:
             return self.cursor.lastrowid
