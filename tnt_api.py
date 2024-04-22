@@ -7,14 +7,14 @@ from typing import Optional
 
 app = FastAPI()
 # Crear una instancia del conector
-connector = MySQLConnector(host="localhost", user="root", password="root", database="tnt")
+connector = MySQLConnector(host="localhost", user="root", password="root", database="TNT")
 
 # Conectar a la base de datos
 connector.connect()
 # EJEMPLO PETICIÓN SIN PARÁMETROS
 @app.get("/distritos")
 def read_distritos():
-    query = "SELECT nombre_distrito FROM distritos"
+    query = "SELECT nombre_distrito FROM Distritos"
     try:
         distritos = connector.fetch_data(query)
         if not distritos:
@@ -26,9 +26,9 @@ def read_distritos():
 # EJEMPLO PETICIÓN CON PARÁMETROS
 @app.get("/distritos/{codigo_distrito}")
 def read_distritos_param(codigo_distrito: int):
-    query = "SELECT nombre_distrito FROM distritos WHERE codigo_distrito = %s"
+    query = "SELECT nombre_distrito FROM Distritos WHERE codigo_distrito = %s"
     try:
-        distrito = connector.fetch_data(query, (codigo_distrito,))
+        distrito = connector.fetch_data(query, [codigo_distrito])
         if not distrito:
             raise HTTPException(status_code=404, detail="No se ha encontrado un distrito")
         return {"Distrito": distrito[0][0]}
@@ -52,7 +52,7 @@ class RadarInsert(BaseModel):
 @app.post("/radares")
 def insert_radar(radar_insert: RadarInsert):
     query = """
-    INSERT INTO radaresfijos
+    INSERT INTO RadaresFijos
     (id, ubicacion, carretera, punto_kilometrico, sentido, tipo, longitud, latitud, coordenadas, cod_distrito)
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
@@ -64,7 +64,7 @@ def insert_radar(radar_insert: RadarInsert):
     )
     connector.execute(query, data)
     connector.commit()
-    new_radar_id = connector.lastrowid  # Obtener el ID del radar recién insertado
+    new_radar_id = radar_insert.id # Obtener el ID del radar recién insertado
     connector.close()
 
 
@@ -91,9 +91,9 @@ class AccidenteDelete(BaseModel):
 def borrar_accidente(accidente_delete: AccidenteDelete):
     try:
         query = """
-        DELETE FROM accidentes WHERE num_expediente = %(num_expediente)s
+        DELETE FROM Accidentes WHERE num_expediente = %s
         """
-        connector.execute(query, accidente_delete.dict())
+        connector.execute(query, accidente_delete.num_expediente)
         connector.commit()
         connector.close()
 
@@ -119,7 +119,7 @@ class PersonaInvolucradaUpdate(BaseModel):
 def update_persona_involucrada(persona_id: str, persona_update: PersonaInvolucradaUpdate):
     try:
         query = """
-        UPDATE personas_involucradas
+        UPDATE PersonasInvolucradas
         SET num_expediente = %s, tipo_vehiculo = %s, tipo_persona = %s,
             rango_edad = %s, sexo = %s, codigo_lesividad = %s, numero_pasajeros = %s
         WHERE uuid = %s
@@ -147,4 +147,7 @@ nest_asyncio.apply()
 if __name__ == "__main__":
     #nest_asyncio.apply()
     #uvicorn.run(app)
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=18000)
+#%%
+
+#%%
