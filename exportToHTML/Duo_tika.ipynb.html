@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>Duo_tika.ipynb</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #cf8e6d;}
+.s2 { color: #bcbec4;}
+.s3 { color: #bcbec4;}
+.s4 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Duo_tika.ipynb</font>
+</center></td></tr></table>
+<pre><span class="s0">#%% 
+</span><span class="s1">from </span><span class="s2">tikapp </span><span class="s1">import </span><span class="s2">TikaApp</span>
+<span class="s0">#%% 
+</span><span class="s2">tika </span><span class="s3">= </span><span class="s2">TikaApp</span><span class="s3">(</span><span class="s2">file_jar</span><span class="s3">=</span><span class="s4">&quot;/home/duo/DataspellProjects/Traffic-Network-Transparency2.0/tika-app-1.20.jar&quot;</span><span class="s3">)</span>
+<span class="s0">#%% 
+</span><span class="s2">file_path </span><span class="s3">= </span><span class="s4">&quot;/home/duo/DataspellProjects/Traffic-Network-Transparency2.0/my_connector.py&quot;</span>
+<span class="s2">tika</span><span class="s3">.</span><span class="s2">detect_content_type</span><span class="s3">(</span><span class="s2">file_path</span><span class="s3">)</span>
+<span class="s0">#%% 
+</span><span class="s2">tika</span><span class="s3">.</span><span class="s2">detect_language</span><span class="s3">(</span><span class="s2">file_path</span><span class="s3">)</span>
+<span class="s0">#%% 
+</span><span class="s2">tika</span><span class="s3">.</span><span class="s2">extract_only_metadata</span><span class="s3">(</span><span class="s2">file_path</span><span class="s3">)</span>
+<span class="s0">#%% 
+</span><span class="s2">tika</span><span class="s3">.</span><span class="s2">extract_all_content</span><span class="s3">(</span><span class="s2">file_path</span><span class="s3">)</span></pre>
+</body>
+</html>
